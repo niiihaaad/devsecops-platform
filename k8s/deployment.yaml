@@ -16,6 +16,6 @@ spec:
         - name: ghcr-secret
       containers:
         - name: user-service
-          image: ghcr.io/niiihaaad/devsecops-platform/user-service:latest
+          image: ghcr.io/niiihaaad/user-service:latest
           ports:
             - containerPort: 3000

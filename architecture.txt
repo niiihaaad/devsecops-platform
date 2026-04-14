@@ -1,0 +1,13 @@
+GitHub
+  ↓
+GitHub Actions (CI/CD)
+  ↓
+Security Scans (Gitleaks + Trivy)
+  ↓
+Docker Build
+  ↓
+GHCR (Container Registry)
+  ↓
+Kubernetes Cluster (Minikube)
+  ↓
+Running Microservice Pods
