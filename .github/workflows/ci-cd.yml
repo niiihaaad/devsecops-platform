@@ -1,10 +1,12 @@
+---
 name: DevSecOps CI/CD Pipeline
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
 
 jobs:
+
   security:
     runs-on: ubuntu-latest
 
@@ -12,15 +14,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # ---------------------------
-      # 🔍 SECRET SCANNING (Gitleaks)
-      # ---------------------------
       - name: Run Gitleaks
         uses: gitleaks/gitleaks-action@v2
 
-      # ---------------------------
-      # 🐍 Python setup
-      # ---------------------------
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -30,18 +26,29 @@ jobs:
         run: |
           pip install fastapi uvicorn
 
-      # ---------------------------
-      # 🐳 Docker build
-      # ---------------------------
       - name: Build Docker image
         run: docker build -t user-service ./user-service
 
-      # ---------------------------
-      # 🛡️ TRIVY SCAN (Docker security)
-      # ---------------------------
       - name: Run Trivy scan
         uses: aquasecurity/trivy-action@master
         with:
           image-ref: user-service
           format: table
           exit-code: 0
+
+
+  deploy:
+    needs: security
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup kubectl
+        uses: azure/setup-kubectl@v4
+
+      - name: Deploy to Kubernetes
+        run: |
+          echo "Deploy step (we will connect cluster later)"
+          kubectl version --client
